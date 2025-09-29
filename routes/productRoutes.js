@@ -4,7 +4,7 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-//! @route POST api/products
+//! @route POST /api/products
 //! @desc Create a new product
 //! @access Private/Admin
 router.post("/", protect, admin, async (req, res) => {
@@ -62,7 +62,7 @@ router.post("/", protect, admin, async (req, res) => {
     }
 });
 
-//! @route PUT api/products/:id
+//! @route PUT /api/products/:id
 //! @desc Update an existing product by id
 //! @access Private/Admin
 router.put("/:id", protect, admin, async (req, res) => {
@@ -125,7 +125,7 @@ router.put("/:id", protect, admin, async (req, res) => {
     }
 });
 
-//! @route DELETE api/products/:id
+//! @route DELETE /api/products/:id
 //! @desc Delete a product by id
 //! @access Private/Admin
 router.delete("/:id", protect, admin, async (req, res) => {
@@ -143,7 +143,7 @@ router.delete("/:id", protect, admin, async (req, res) => {
     }
 });
 
-//! @route GET api/products
+//! @route GET /api/products
 //! @desc Get all products with optional query filters
 //! @access Public
 router.get("/", async (req, res) => {
@@ -215,7 +215,7 @@ router.get("/", async (req, res) => {
 });
 
 //! @route GET /api/products/best-seller
-//! @desc retrieve the products with the highest rating
+//! @desc Retrieve the products with the highest rating
 //! @access Public
 router.get("/best-seller", async (req, res) => {
     try {
@@ -231,8 +231,8 @@ router.get("/best-seller", async (req, res) => {
     }
 });
 
-//! @route GET api/products/new-arrivals
-//! @desc retrieve latest 8 products - creation date
+//! @route GET /api/products/new-arrivals
+//! @desc Retrieve latest 8 products - creation date
 //! @access Public
 router.get("/new-arrivals", async (req, res) => {
     try {
@@ -248,7 +248,7 @@ router.get("/new-arrivals", async (req, res) => {
     }
 }) 
 
-//! @route GET api/products/:id
+//! @route GET /api/products/:id
 //! @desc Get a single product by id
 //! @access Public
 router.get("/:id", async (req, res) => {
@@ -266,7 +266,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //! @route GET /api/products/similar/:id
-//! @desc retrieve similar products based on the current product's gender & category
+//! @desc Retrieve similar products based on the current product's gender & category
 //! @access Public
 router.get("/similar/:id", async (req, res) => {
     try {
