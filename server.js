@@ -19,17 +19,14 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
+
 // const port = process.env.PORT || 5000;
 
 //! Connect to MongoDB:
 connectDB();
 
 app.get("/", (req, res) => {
-    res.json({
-        message: "Welcome to Fabrilix API!",
-        mongoURI: process.env.MONGO_URI ? "✅ Exists" : "❌ Missing",
-        nodeEnv: process.env.NODE_ENV || "undefined",
-    });
+    res.send("Welcome to Fabrilix API!");
 });
 
 //! API Routes:
