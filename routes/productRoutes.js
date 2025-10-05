@@ -149,7 +149,7 @@ router.delete("/:id", protect, admin, async (req, res) => {
 router.get("/", async (req, res) => {
     try {
         const {
-            collection,
+            collections,
             size,
             color,
             gender,
@@ -165,7 +165,8 @@ router.get("/", async (req, res) => {
 
         let query = {};
         //? Apply filters to query
-        if (collection && collection.toLocaleLowerCase() !== "all") query.collections = collection;
+        if (collections && collections.toLocaleLowerCase() !== "all")
+            query.collections = collections;
         if (category && category.toLocaleLowerCase() !== "all") query.category = category;
         if (material) query.material = { $in: material.split(",") };
         if (brand) query.brand = { $in: brand.split(",") };
@@ -191,7 +192,7 @@ router.get("/", async (req, res) => {
                 case "priceAsc":
                     sort = { price: 1 };
                     break;
-                case "priceDesc":
+                case "priceDsc":
                     sort = { price: -1 };
                     break;
                 case "popularity":
@@ -246,7 +247,7 @@ router.get("/new-arrivals", async (req, res) => {
         console.log(err.message);
         res.status(500).send("Server error");
     }
-}) 
+});
 
 //! @route GET /api/products/:id
 //! @desc Get a single product by id
