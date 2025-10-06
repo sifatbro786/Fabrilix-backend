@@ -14,13 +14,14 @@ const subscribeRoutes = require("./routes/subscribeRoutes");
 const userAdminRoutes = require("./routes/userAdminRoutes");
 const productAdminRoutes = require("./routes/productAdminRoutes");
 const orderAdminRoutes = require("./routes/orderAdminRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-// const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
 //! Connect to MongoDB:
 connectDB();
@@ -37,14 +38,15 @@ app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", subscribeRoutes);
+app.use("/api/contact", contactRoutes);
 
 //! Admin Routes:
 app.use("/api/admin/users", userAdminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", orderAdminRoutes);
 
-// app.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
 
 module.exports = app;

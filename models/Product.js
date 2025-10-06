@@ -24,6 +24,11 @@ const productSchema = new mongoose.Schema(
             required: true,
             default: 0,
         },
+        gender: {
+            type: String,
+            enum: ["Men", "Women"],
+            required: true,
+        },
         sku: {
             type: String,
             unique: true,
@@ -35,6 +40,7 @@ const productSchema = new mongoose.Schema(
         },
         brand: {
             type: String,
+            default: "",
         },
         sizes: {
             type: [String],
@@ -46,26 +52,21 @@ const productSchema = new mongoose.Schema(
         },
         collections: {
             type: String,
-            required: true,
+            trim: true,
+            default: "",
         },
         material: {
             type: String,
-        },
-        gender: {
-            type: String,
-            enum: ["Men", "Women"],
+            default: "",
         },
         images: [
             {
-                url: {
-                    type: String,
-                    required: true,
-                },
-                altText: {
-                    type: String,
-                },
+                url: { type: String, required: true },
+                public_id: { type: String },
+                altText: { type: String },
             },
         ],
+
         isFeatured: {
             type: Boolean,
             default: false,
@@ -84,6 +85,7 @@ const productSchema = new mongoose.Schema(
         },
         tags: {
             type: [String],
+            default: [],
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -92,19 +94,25 @@ const productSchema = new mongoose.Schema(
         },
         metaTitle: {
             type: String,
+            default: "",
         },
         metaDescription: {
             type: String,
+            default: "",
         },
         metaKeywords: {
             type: String,
+            default: "",
         },
         dimensions: {
-            length: Number,
-            width: Number,
-            height: Number,
+            length: { type: Number, default: 0 },
+            width: { type: Number, default: 0 },
+            height: { type: Number, default: 0 },
         },
-        weight: Number,
+        weight: {
+            type: Number,
+            default: 0,
+        },
     },
 
     {

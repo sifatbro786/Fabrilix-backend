@@ -15,7 +15,7 @@ router.post("/subscribe", async (req, res) => {
     try {
         let subscriber = await Subscriber.findOne({ email });
         if (subscriber) {
-            return res.status(400).json({ message: "Email already subscribed" });
+            return res.status(400).json({ message: "Email already subscribed!" });
         }
 
         //? create a new subscriber

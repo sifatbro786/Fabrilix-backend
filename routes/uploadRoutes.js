@@ -14,40 +14,54 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-//? multer setup using memory storage:
+// //? multer setup using memory storage:
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post("/", upload.single("image"), protect, async (req, res) => {
+//? upload multiple images
+router.post("/", protect, upload.array("images"), async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: "No files uploaded" });
         }
 
-        //? Function to handle the stream upload to cloudinary
-        const streamUpload = (fileBuffer) => {
+        const uploadPromises = req.files.map((file) => {
             return new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream((error, result) => {
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(error);
-                    }
-                });
-
-                // ? use streamifier to convert file buffer to a readable stream
-                streamifier.createReadStream(fileBuffer).pipe(stream);
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "products" },
+                    (error, result) => {
+                        if (result) resolve(result);
+                        else reject(error);
+                    },
+                );
+                streamifier.createReadStream(file.buffer).pipe(stream);
             });
-        };
+        });
 
-        //? call the stream upload function
-        const result = await streamUpload(req.file.buffer);
+        const results = await Promise.all(uploadPromises);
+        const images = results.map((r) => ({
+            url: r.secure_url,
+            public_id: r.public_id,
+        }));
 
-        //? response with the uploaded image url
-        res.status(200).json({ imageUrl: result.secure_url });
+        res.status(200).json({ images });
     } catch (err) {
-        console.log(err.message);
-        res.status(500).send("Server error");
+        console.error(err);
+        res.status(500).json({ message: "Image upload failed" });
+    }
+});
+
+//? delete image
+router.delete("/", protect, async (req, res) => {
+    try {
+        const { public_id } = req.body;
+        if (!public_id) return res.status(400).json({ message: "No public_id provided" });
+
+        await cloudinary.uploader.destroy(public_id);
+        res.status(200).json({ message: "Image deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Delete failed" });
     }
 });
 
